@@ -21,7 +21,6 @@ data = request.urlopen(request_data).read()
 print(data)
 print(data.decode('utf-8'))
 
-exit()
 obj = requests.get('http://img.jandan.net/news/2017/10/813d79a909d10cc1eeea9f794f4b2d33.jpg',headers=headers).content
 
 print(base64.b64decode(obj))
