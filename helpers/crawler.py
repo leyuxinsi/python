@@ -123,15 +123,16 @@ class Crawler():
         self.cur.execute(query, [sour_url])
         self.conn.commit()
 
-    def insert_temp(self, title, summary, save_path, tags, link, rss_id, published):
+    def insert_temp(self, title, summary, save_path, tags, link, rss_id, published,content):
         """将数据插入资源临时表"""
         is_crawler = 1
         if not save_path:
             is_crawler = 0
 
-        query = "insert into br_source_temp(name,content,sour_cover,sour_tags,sour_url,is_crawler,rss_id,published)" \
-                " values (%s,%s,%s,%s,%s,%s,%s,%s)"
-        self.cur.execute(query, (title, summary, save_path, tags, link, is_crawler, rss_id, self.convert_published(published)))
+        query = "insert into " \
+                "br_source_temp(name,summary,sour_cover,sour_tags,sour_url,is_crawler,rss_id,published,content)" \
+                " values (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        self.cur.execute(query, (title, summary, save_path, tags, link, is_crawler, rss_id, self.convert_published(published),content))
         self.conn.commit()
 
     def update_rss(self, rss_id):

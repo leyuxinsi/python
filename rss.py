@@ -16,13 +16,6 @@ def main(rss_id, name, rss_url):
     try:
         data = feedparser.parse(rss_url)
 
-        # pprint(data.entries[0])
-        # format_gmt = '%a, %d %b %Y %H:%M:%S +0000'
-        # published_date = datetime.datetime.strptime(data.entries[0].published, format_gmt)
-        # print(published_date)
-        #
-        # exit()
-
         for item in data.entries:
             try:
                 # 检查是否重复
@@ -41,7 +34,7 @@ def main(rss_id, name, rss_url):
                 # 如果有content字段，那么summary为简短描述，否则为文章内容
                 if item.has_key('content'):
                     content = item['content'][0]['value']
-                    summary = item['summary'].replace("\n", "")
+                    summary = item['summary'].replace("\n", "")[0:100]
                     soup = BeautifulSoup(content, 'html5lib')
                     img_obj = soup.find('img')
                     if not cover:
@@ -61,6 +54,7 @@ def main(rss_id, name, rss_url):
                     summary = soup.get_text().replace("\n", "")[0:100]
                 else:
                     summary = item['link']
+                    content = ''
 
                 save_path = crawler.get_img(cover)
 
@@ -72,7 +66,7 @@ def main(rss_id, name, rss_url):
                 print(title)
                 print(save_path)
 
-                crawler.insert_temp(title, summary, save_path, ",".join(tag_arr), link, rss_id, item.published)
+                crawler.insert_temp(title, summary, save_path, ",".join(tag_arr), link, rss_id, item.published, content)
                 crawler.insert_url(link)
 
             except Exception as e:
